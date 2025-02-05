@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram Form Submission Documentation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      color: #333;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 5px;
+    }
+
+    .code-block {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .copy-btn:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h3>Step 1: Set Up a Telegram Bot and Group</h3>
+    <p>Create a Telegram bot using BotFather and get the API token. Add the bot to your group and get the group chat ID.
+    </p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <code>https://api.telegram.org/bot&lt;YOUR_BOT_TOKEN&gt;/getUpdates</code>
+    </div>
+
+    <h3>Step 2: Set Up a Contact Form in WordPress</h3>
+    <p>Use Contact Form 7 or WPForms to create a form with fields like Name, Email, and Message.</p>
+
+    <h3>Step 3: Send Form Submissions to Telegram</h3>
+    <p>Add the following code to your theme’s <code>functions.php</code> file to send form submissions to Telegram.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      <pre>
+add_action('wpcf7_mail_sent', 'send_to_telegram');
+function send_to_telegram($contact_form) {
+    $submission = WPCF7_Submission::get_instance();
+    if ($submission) {
+        $data = $submission->get_posted_data();
+        $message = "New Submission: \n" .
+                   "Name: " . $data['your-name'] . "\n" .
+                   "Email: " . $data['your-email'] . "\n" .
+                   "Message: " . $data['your-message'];
+        $token = 'YOUR_BOT_TOKEN';
+        $chat_id = 'YOUR_CHAT_ID';
+        file_get_contents("https://api.telegram.org/bot$token/sendMessage?chat_id=$chat_id&text=" . urlencode($message));
+    }
+}
+            </pre>
+    </div>
+  </div>
+
+  <script>
+    function copyCode(button) {
+      let codeBlock = button.nextElementSibling.textContent;
+      navigator.clipboard.writeText(codeBlock).then(() => {
+        button.textContent = "Copied!";
+        setTimeout(() => button.textContent = "Copy", 2000);
+      });
+    }
+  </script>
+</body>
+
+</html>
+vou
